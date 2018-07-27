@@ -1,0 +1,5 @@
+Originally intended for passwords, this utility provides a front end for a library (KeyMaster.dll) that provides a means for encrypting and hashing text. You would use this to encrypt a password or a database connection string and then paste that encrypted string into a file that's accessible at run time. 
+Typically you'd include a key in the app.config file that provides the path to this file. At run time the encrypted string is passed to KeyMaster to be decrypted. If you use a specific key to encrypt the text with (it's optional) then you'd have to provide it to the user somehow (through a ReadMe file or hard coded).
+
+This will also encrypt whole files. Drag and drop the files to encrypt into the text field. The resulting files appear in the same directory that they came from.
+The password to encrypt these files is encrypted itself and kept in the file setup.dll in the application directory. It doesn't require a key. The intent of this feature was to encrypt the source files before moving them to GitHub.
