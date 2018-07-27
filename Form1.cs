@@ -180,11 +180,20 @@ namespace EncryptAndHash
             }
         }
 
+        private string GetKey()
+        {
+            //NameValueCollection ConfigData = (NameValueCollection)ConfigurationSettings.GetConfig("appSettings");
+            //attachmentPath = ConfigData.Get("attachmentPath");
+            string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string[] key = File.ReadAllLines(appDirectory + "setup.dll");
+            return StringCipher.Decrypt(key[0]);
+
+        }
         private void btnFileEncrypt_Click(object sender, EventArgs e)
         {
             byte[] salt = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; // Must be at least eight bytes
             int iterations = 1052; // Recommendation is >= 1000.
-            string password = "ThisIsATest";
+            string password = GetKey();
             string destinationFilename = "";
             string sourceFilename = tbFilePath.Text;
             string[] sourceFiles = sourceFilename.Split(Environment.NewLine.ToCharArray()); 
@@ -201,7 +210,7 @@ namespace EncryptAndHash
                 }                
             }
             tbFilePath.Text = "";
-        }
+        }       
 
         private void EncryptFile(string sourceFilename, string destinationFilename, string password, byte[] salt, int iterations)
         {// https:// stackoverflow.com/questions/9237324/encrypting-decrypting-large-files-net#
@@ -232,7 +241,7 @@ namespace EncryptAndHash
         {
             byte[] salt = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; // Must be at least eight bytes
             int iterations = 1052; // Recommendation is >= 1000.
-            string password = "ThisIsATest";
+            string password = GetKey();     //"ThisIsATest";  xxgWvLe0kJRU
             string destinationFilename = "";
             string sourceFilename = tbFilePath.Text;
             string[] sourceFiles = sourceFilename.Split(Environment.NewLine.ToCharArray());
