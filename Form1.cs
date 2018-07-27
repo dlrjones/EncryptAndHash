@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 using KeyMaster;
 
 namespace EncryptAndHash
@@ -11,13 +12,16 @@ namespace EncryptAndHash
     public partial class Form1 : Form
     {
         private static NameValueCollection ConfigData = null;
-
+        private bool deleteSource = false;
         public Form1()
         {
             InitializeComponent();
+            AllowDrop = true;
             ConfigData = (NameValueCollection)ConfigurationSettings.GetConfig("appSettings");
             tbString.Select();
         }
+
+//------------------------------------------- Password Encryption -----------------------------------------
 
         private void btnEncrypt_Click(object sender, EventArgs e)
         {
@@ -145,6 +149,153 @@ namespace EncryptAndHash
                                         "with a 256 block size, the current AES standard." + Environment.NewLine +
                                         "Hashing uses the SHA256Managed class which creates a 32 byte fixed length hash"
                                         , "How To Use This", MessageBoxButtons.OK);
+        }
+
+
+
+//------------------------------------------- File Encryption -----------------------------------------
+
+        private void btnBrowse_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dlgBrowse = new OpenFileDialog();
+            dlgBrowse.Title = "Select one or more files";
+            dlgBrowse.SupportMultiDottedExtensions = true;
+            dlgBrowse.Multiselect = true;
+            if (dlgBrowse.ShowDialog() == DialogResult.OK)
+            {
+                foreach (string fname in dlgBrowse.FileNames)
+                {
+                    tbFilePath.Text += fname + Environment.NewLine;
+                }
+            }
+        }
+
+        private string GetKey()
+        {
+            string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string[] key = File.ReadAllLines(appDirectory + "setup.dll");
+            return StringCipher.Decrypt(key[0]);
+        }
+
+        private void btnFileEncrypt_Click(object sender, EventArgs e)
+        {
+            byte[] salt = new byte[] { 0x49, 0x54, 0x54, 0x56, 0x49, 0x51, 0x55, 0x49 }; // Must be at least eight bytes
+            int iterations = 1052; // should be >= 1000.
+            string password = GetKey();
+            string destinationFilename = "";
+            string sourceFilename = tbFilePath.Text;
+            string[] sourceFiles = sourceFilename.Split(Environment.NewLine.ToCharArray()); 
+            foreach (string source in sourceFiles)
+            {
+                if(source.Length > 0){
+                    destinationFilename = source + ".dlr";
+                    if (File.Exists(destinationFilename))
+                        File.Delete(destinationFilename);
+
+                    EncryptFile(source, destinationFilename, password, salt, iterations);
+                    if (deleteSource)
+                        File.Delete(source);
+                }                
+            }
+            tbFilePath.Text = "";
+        }       
+
+        private void EncryptFile(string sourceFilename, string destinationFilename, string password, byte[] salt, int iterations)
+        {
+            AesManaged aes = new AesManaged();
+            aes.BlockSize = aes.LegalBlockSizes[0].MaxSize;
+            aes.KeySize = aes.LegalKeySizes[0].MaxSize;
+            Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(password, salt, iterations);
+            aes.Key = key.GetBytes(aes.KeySize / 8);
+            aes.IV = key.GetBytes(aes.BlockSize / 8);
+            aes.Mode = CipherMode.CBC;
+            ICryptoTransform transform = aes.CreateEncryptor(aes.Key, aes.IV);
+
+            using (FileStream destination = new FileStream(destinationFilename, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+            {
+                using (CryptoStream cryptoStream = new CryptoStream(destination, transform, CryptoStreamMode.Write))
+                {
+                    using (FileStream source = new FileStream(sourceFilename, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    {
+                        source.CopyTo(cryptoStream);
+                    }
+                }
+            }
+        }
+
+        private void btnFileDecrypt_Click(object sender, EventArgs e)
+        {
+            byte[] salt = new byte[] { 0x49, 0x54, 0x54, 0x56, 0x49, 0x51, 0x55, 0x49 }; // Must be at least eight bytes
+            int iterations = 1052; // >= 1000.
+            string password = GetKey();     //"ThisIsATest";  xxgWvLe0kJRU
+            string destinationFilename = "";
+            string sourceFilename = tbFilePath.Text;
+            string[] sourceFiles = sourceFilename.Split(Environment.NewLine.ToCharArray());
+
+            foreach (string source in sourceFiles)
+            {
+                if (source.Length > 0)
+                {
+                    destinationFilename = source.Substring(0, source.Length - 4);
+                    if (File.Exists(destinationFilename))
+                        File.Delete(destinationFilename);
+                    DecryptFile(source, destinationFilename, password, salt, iterations);
+                    File.Delete(source);
+                 }
+            }
+            tbFilePath.Text = "";
+        }
+
+        private void DecryptFile(string sourceFilename, string destinationFilename, string password, byte[] salt, int iterations)
+        {           
+            AesManaged aes = new AesManaged();
+            aes.BlockSize = aes.LegalBlockSizes[0].MaxSize;
+            aes.KeySize = aes.LegalKeySizes[0].MaxSize;
+            Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(password, salt, iterations);
+            aes.Key = key.GetBytes(aes.KeySize / 8);
+            aes.IV = key.GetBytes(aes.BlockSize / 8);
+            aes.Mode = CipherMode.CBC;
+            ICryptoTransform transform = aes.CreateDecryptor(aes.Key, aes.IV);
+
+            using (FileStream destination = new FileStream(destinationFilename, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+            {
+                using (CryptoStream cryptoStream = new CryptoStream(destination, transform, CryptoStreamMode.Write))
+                {
+                    try
+                    {
+                        using (FileStream source = new FileStream(sourceFilename, FileMode.Open, FileAccess.Read, FileShare.Read))
+                        {
+                            source.CopyTo(cryptoStream);
+                        }
+                    }
+                    catch (CryptographicException exception)
+                    {
+                        if (exception.Message == "Padding is invalid and cannot be removed.")
+                            throw new ApplicationException("Universal Microsoft Cryptographic Exception (Not to be believed!)", exception);
+                        else
+                            throw;
+                    }
+                }
+            }
+        }
+
+        private void cbDelete_CheckedChanged(object sender, EventArgs e)
+        {
+            deleteSource = !deleteSource;
+        }
+
+        private void tbFilePath_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+        }
+
+        private void tbFilePath_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            foreach (string file in files)
+            {
+                tbFilePath.Text += file + Environment.NewLine;
+            }
         }
     }
 }
