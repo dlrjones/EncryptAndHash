@@ -16,9 +16,26 @@ namespace EncryptAndHash
         public Form1()
         {
             InitializeComponent();
+            AllowDrop = true;
+            //DragEnter += new DragEventHandler(Form1_DragEnter);
+            //DragDrop += new DragEventHandler(Form1_DragDrop);
             ConfigData = (NameValueCollection)ConfigurationSettings.GetConfig("appSettings");
             tbString.Select();
         }
+
+        //private void Form1_DragEnter(object sender, DragEventArgs e)
+        //{
+        //    if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+        //}
+
+        //private void Form1_DragDrop(object sender, DragEventArgs e)
+        //{
+        //    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+        //    foreach (string file in files)
+        //    {
+        //        tbFilePath.Text += file + Environment.NewLine;
+        //    }
+        //}
 
         private void btnEncrypt_Click(object sender, EventArgs e)
         {
@@ -150,11 +167,16 @@ namespace EncryptAndHash
 
         private void btnBrowse_Click(object sender, EventArgs e)
         {
-            FileDialog fdBrowse = new OpenFileDialog();
-            DialogResult result = fdBrowse.ShowDialog();
-            if (result == DialogResult.OK)
+            OpenFileDialog dlgBrowse = new OpenFileDialog();
+            dlgBrowse.Title = "Select one or more files";
+            dlgBrowse.SupportMultiDottedExtensions = true;
+            dlgBrowse.Multiselect = true;
+            if (dlgBrowse.ShowDialog() == DialogResult.OK)
             {
-                tbFilePath.Text = fdBrowse.FileName;
+                foreach (string fname in dlgBrowse.FileNames)
+                {
+                    tbFilePath.Text += fname + Environment.NewLine;
+                }
             }
         }
 
@@ -162,16 +184,23 @@ namespace EncryptAndHash
         {
             byte[] salt = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; // Must be at least eight bytes
             int iterations = 1052; // Recommendation is >= 1000.
-            string sourceFilename = tbFilePath.Text;
-            string destinationFilename = sourceFilename + ".dlr";
-            if (File.Exists(destinationFilename))
-                File.Delete(destinationFilename);
-            //string[] exten = destinationFilename.Split('.');
-            //destinationFilename = exten[0]
             string password = "ThisIsATest";
-            EncryptFile(sourceFilename, destinationFilename, password, salt, iterations);
-            if (deleteSource)
-                File.Delete(sourceFilename);
+            string destinationFilename = "";
+            string sourceFilename = tbFilePath.Text;
+            string[] sourceFiles = sourceFilename.Split(Environment.NewLine.ToCharArray()); 
+            foreach (string source in sourceFiles)
+            {
+                if(source.Length > 0){
+                    destinationFilename = source + ".dlr";
+                    if (File.Exists(destinationFilename))
+                        File.Delete(destinationFilename);
+
+                    EncryptFile(source, destinationFilename, password, salt, iterations);
+                    if (deleteSource)
+                        File.Delete(source);
+                }                
+            }
+            tbFilePath.Text = "";
         }
 
         private void EncryptFile(string sourceFilename, string destinationFilename, string password, byte[] salt, int iterations)
@@ -203,13 +232,23 @@ namespace EncryptAndHash
         {
             byte[] salt = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; // Must be at least eight bytes
             int iterations = 1052; // Recommendation is >= 1000.
-            string sourceFilename = tbFilePath.Text;
-            string destinationFilename = sourceFilename.Substring(0, sourceFilename.Length - 4);            
             string password = "ThisIsATest";
-            if(File.Exists(destinationFilename))
-                File.Delete(destinationFilename);
-            DecryptFile(sourceFilename, destinationFilename, password, salt, iterations);
-            File.Delete(sourceFilename);
+            string destinationFilename = "";
+            string sourceFilename = tbFilePath.Text;
+            string[] sourceFiles = sourceFilename.Split(Environment.NewLine.ToCharArray());
+
+            foreach (string source in sourceFiles)
+            {
+                if (source.Length > 0)
+                {
+                    destinationFilename = source.Substring(0, source.Length - 4);
+                    if (File.Exists(destinationFilename))
+                        File.Delete(destinationFilename);
+                    DecryptFile(source, destinationFilename, password, salt, iterations);
+                    File.Delete(source);
+                 }
+            }
+            tbFilePath.Text = "";
         }
 
         private void DecryptFile(string sourceFilename, string destinationFilename, string password, byte[] salt, int iterations)
@@ -250,6 +289,20 @@ namespace EncryptAndHash
         private void cbDelete_CheckedChanged(object sender, EventArgs e)
         {
             deleteSource = !deleteSource;
+        }
+
+        private void tbFilePath_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+        }
+
+        private void tbFilePath_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            foreach (string file in files)
+            {
+                tbFilePath.Text += file + Environment.NewLine;
+            }
         }
     }
 }
