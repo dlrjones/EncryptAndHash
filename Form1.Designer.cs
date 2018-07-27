@@ -73,6 +73,7 @@
             this.groupBox4.Controls.Add(this.label4);
             this.groupBox4.Controls.Add(this.btnDecrypt);
             this.groupBox4.Controls.Add(this.btnEncrypt);
+            this.groupBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox4.Location = new System.Drawing.Point(12, 12);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(529, 278);
@@ -85,7 +86,7 @@
             this.tbKey.BackColor = System.Drawing.SystemColors.Window;
             this.tbKey.Location = new System.Drawing.Point(9, 111);
             this.tbKey.Name = "tbKey";
-            this.tbKey.Size = new System.Drawing.Size(488, 22);
+            this.tbKey.Size = new System.Drawing.Size(488, 27);
             this.tbKey.TabIndex = 3;
             // 
             // label5
@@ -93,15 +94,15 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(9, 36);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(439, 17);
+            this.label5.Size = new System.Drawing.Size(439, 20);
             this.label5.TabIndex = 6;
-            this.label5.Text = "Text to Encrypt or Hash        (or the plain text result from Decryption)";
+            this.label5.Text = "Text to Encrypt or Hash     (or the result from Decryption)";
             // 
             // tbString
             // 
             this.tbString.Location = new System.Drawing.Point(12, 56);
             this.tbString.Name = "tbString";
-            this.tbString.Size = new System.Drawing.Size(488, 22);
+            this.tbString.Size = new System.Drawing.Size(488, 27);
             this.tbString.TabIndex = 0;
             // 
             // label3
@@ -109,7 +110,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(6, 91);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(96, 17);
+            this.label3.Size = new System.Drawing.Size(112, 20);
             this.label3.TabIndex = 54;
             this.label3.Text = "Key (optional)";
             // 
@@ -117,7 +118,7 @@
             // 
             this.tbHash.Location = new System.Drawing.Point(9, 163);
             this.tbHash.Name = "tbHash";
-            this.tbHash.Size = new System.Drawing.Size(488, 22);
+            this.tbHash.Size = new System.Drawing.Size(488, 27);
             this.tbHash.TabIndex = 4;
             // 
             // label2
@@ -125,7 +126,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(9, 143);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(103, 17);
+            this.label2.Size = new System.Drawing.Size(121, 20);
             this.label2.TabIndex = 5;
             this.label2.Text = "Encrypted Text";
             // 
@@ -142,18 +143,18 @@
             // 
             // tbHashCount
             // 
-            this.tbHashCount.Location = new System.Drawing.Point(303, 218);
+            this.tbHashCount.Location = new System.Drawing.Point(303, 213);
             this.tbHashCount.Name = "tbHashCount";
-            this.tbHashCount.Size = new System.Drawing.Size(42, 22);
+            this.tbHashCount.Size = new System.Drawing.Size(42, 27);
             this.tbHashCount.TabIndex = 13;
             this.tbHashCount.Text = "500";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(343, 222);
+            this.label1.Location = new System.Drawing.Point(343, 217);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(56, 17);
+            this.label1.Size = new System.Drawing.Size(67, 20);
             this.label1.TabIndex = 14;
             this.label1.Text = "Time(s)";
             // 
@@ -182,7 +183,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(-4, 68);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(0, 17);
+            this.label4.Size = new System.Drawing.Size(0, 20);
             this.label4.TabIndex = 4;
             // 
             // btnDecrypt
@@ -213,6 +214,7 @@
             this.groupBox1.Controls.Add(this.btnBrowse);
             this.groupBox1.Controls.Add(this.tbFilePath);
             this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(12, 316);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(529, 302);
@@ -222,7 +224,7 @@
             // 
             // btnBrowse
             // 
-            this.btnBrowse.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBrowse.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnBrowse.Location = new System.Drawing.Point(435, 219);
             this.btnBrowse.Name = "btnBrowse";
             this.btnBrowse.Size = new System.Drawing.Size(75, 31);
@@ -249,7 +251,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(6, 25);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(164, 17);
+            this.label6.Size = new System.Drawing.Size(194, 20);
             this.label6.TabIndex = 59;
             this.label6.Text = "Drag and Drop files here";
             // 
@@ -258,7 +260,7 @@
             this.cbDelete.AutoSize = true;
             this.cbDelete.Location = new System.Drawing.Point(9, 263);
             this.cbDelete.Name = "cbDelete";
-            this.cbDelete.Size = new System.Drawing.Size(251, 21);
+            this.cbDelete.Size = new System.Drawing.Size(295, 24);
             this.cbDelete.TabIndex = 63;
             this.cbDelete.Text = "Delete Source File After Encryption";
             this.cbDelete.UseVisualStyleBackColor = true;
@@ -268,7 +270,7 @@
             // 
             this.btnFileDecrypt.Location = new System.Drawing.Point(90, 217);
             this.btnFileDecrypt.Name = "btnFileDecrypt";
-            this.btnFileDecrypt.Size = new System.Drawing.Size(75, 28);
+            this.btnFileDecrypt.Size = new System.Drawing.Size(82, 28);
             this.btnFileDecrypt.TabIndex = 62;
             this.btnFileDecrypt.Text = "Decrypt";
             this.btnFileDecrypt.UseVisualStyleBackColor = true;
@@ -286,7 +288,8 @@
             // 
             // btnQuit
             // 
-            this.btnQuit.Location = new System.Drawing.Point(469, 654);
+            this.btnQuit.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnQuit.Location = new System.Drawing.Point(447, 646);
             this.btnQuit.Name = "btnQuit";
             this.btnQuit.Size = new System.Drawing.Size(75, 28);
             this.btnQuit.TabIndex = 21;

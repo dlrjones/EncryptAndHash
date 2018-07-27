@@ -17,25 +17,11 @@ namespace EncryptAndHash
         {
             InitializeComponent();
             AllowDrop = true;
-            //DragEnter += new DragEventHandler(Form1_DragEnter);
-            //DragDrop += new DragEventHandler(Form1_DragDrop);
             ConfigData = (NameValueCollection)ConfigurationSettings.GetConfig("appSettings");
             tbString.Select();
         }
 
-        //private void Form1_DragEnter(object sender, DragEventArgs e)
-        //{
-        //    if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
-        //}
-
-        //private void Form1_DragDrop(object sender, DragEventArgs e)
-        //{
-        //    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-        //    foreach (string file in files)
-        //    {
-        //        tbFilePath.Text += file + Environment.NewLine;
-        //    }
-        //}
+//------------------------------------------- Password Encryption -----------------------------------------
 
         private void btnEncrypt_Click(object sender, EventArgs e)
         {
@@ -165,6 +151,10 @@ namespace EncryptAndHash
                                         , "How To Use This", MessageBoxButtons.OK);
         }
 
+
+
+//------------------------------------------- File Encryption -----------------------------------------
+
         private void btnBrowse_Click(object sender, EventArgs e)
         {
             OpenFileDialog dlgBrowse = new OpenFileDialog();
@@ -182,17 +172,15 @@ namespace EncryptAndHash
 
         private string GetKey()
         {
-            //NameValueCollection ConfigData = (NameValueCollection)ConfigurationSettings.GetConfig("appSettings");
-            //attachmentPath = ConfigData.Get("attachmentPath");
             string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
             string[] key = File.ReadAllLines(appDirectory + "setup.dll");
             return StringCipher.Decrypt(key[0]);
-
         }
+
         private void btnFileEncrypt_Click(object sender, EventArgs e)
         {
-            byte[] salt = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; // Must be at least eight bytes
-            int iterations = 1052; // Recommendation is >= 1000.
+            byte[] salt = new byte[] { 0x49, 0x54, 0x54, 0x56, 0x49, 0x51, 0x55, 0x49 }; // Must be at least eight bytes
+            int iterations = 1052; // should be >= 1000.
             string password = GetKey();
             string destinationFilename = "";
             string sourceFilename = tbFilePath.Text;
@@ -213,12 +201,10 @@ namespace EncryptAndHash
         }       
 
         private void EncryptFile(string sourceFilename, string destinationFilename, string password, byte[] salt, int iterations)
-        {// https:// stackoverflow.com/questions/9237324/encrypting-decrypting-large-files-net#
+        {
             AesManaged aes = new AesManaged();
             aes.BlockSize = aes.LegalBlockSizes[0].MaxSize;
             aes.KeySize = aes.LegalKeySizes[0].MaxSize;
-            // NB: Rfc2898DeriveBytes initialization and subsequent calls to   GetBytes   must be eactly the same, including order, 
-            // on both the encryption and decryption sides.
             Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(password, salt, iterations);
             aes.Key = key.GetBytes(aes.KeySize / 8);
             aes.IV = key.GetBytes(aes.BlockSize / 8);
@@ -239,8 +225,8 @@ namespace EncryptAndHash
 
         private void btnFileDecrypt_Click(object sender, EventArgs e)
         {
-            byte[] salt = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; // Must be at least eight bytes
-            int iterations = 1052; // Recommendation is >= 1000.
+            byte[] salt = new byte[] { 0x49, 0x54, 0x54, 0x56, 0x49, 0x51, 0x55, 0x49 }; // Must be at least eight bytes
+            int iterations = 1052; // >= 1000.
             string password = GetKey();     //"ThisIsATest";  xxgWvLe0kJRU
             string destinationFilename = "";
             string sourceFilename = tbFilePath.Text;
@@ -265,8 +251,6 @@ namespace EncryptAndHash
             AesManaged aes = new AesManaged();
             aes.BlockSize = aes.LegalBlockSizes[0].MaxSize;
             aes.KeySize = aes.LegalKeySizes[0].MaxSize;
-            // NB: Rfc2898DeriveBytes initialization and subsequent calls to   GetBytes   must be eactly the same, including order, 
-            // on both the encryption and decryption sides.
             Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(password, salt, iterations);
             aes.Key = key.GetBytes(aes.KeySize / 8);
             aes.IV = key.GetBytes(aes.BlockSize / 8);
