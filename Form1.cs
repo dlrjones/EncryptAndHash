@@ -309,7 +309,9 @@ namespace EncryptAndHash
             MessageBox.Show("To Encrypt or Hash" + Environment.NewLine +
                                         "Enter the text that you want to Encrypt or Hash" + Environment.NewLine +
                                         "Enter an Encryption/Hash key. There is a default key so this is optional" + Environment.NewLine +
-                                        "Click Encrypt or Hash. The result appears in the Encrypted Text box." + Environment.NewLine + Environment.NewLine +
+                                        "Click Encrypt or Hash. The result appears in the Encrypted Text box." + Environment.NewLine +
+                                        "If you provide a key or change the number of hash iterations then you'll" + Environment.NewLine+
+                                        "have to keep track of them, they aren't saved." + Environment.NewLine + Environment.NewLine +
                                         "To Decrypt" + Environment.NewLine +
                                         "Paste the encrypted text string into the Encrypted Text box" + Environment.NewLine +
                                         "Enter the key, if there is one. If you don't know it try leaving this blank." + Environment.NewLine +
