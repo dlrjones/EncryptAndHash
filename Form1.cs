@@ -134,22 +134,7 @@ namespace EncryptAndHash
             Application.Exit();
         }
 
-        private void pictureBox3_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("To Encrypt or Hash" + Environment.NewLine +
-                                        "Enter the text that you want to Encrypt or Hash" + Environment.NewLine +
-                                        "Enter an Encryption/Hash key. There is a default key so this is optional" + Environment.NewLine +
-                                        "Click Encrypt or Hash. The result appears in the Encrypted Text box." + Environment.NewLine + Environment.NewLine +
-                                        "To Decrypt" + Environment.NewLine +
-                                        "Paste the encrypted text string into the Encrypted Text box" + Environment.NewLine +
-                                        "Enter the key, if there is one. If you don't know it try leaving this blank." + Environment.NewLine +
-                                        "Click the Decrypt button" + Environment.NewLine +
-                                        "The decrypted text appears in the Encrypt or Hash text box." + Environment.NewLine + Environment.NewLine +
-                                        "Encryption is done with the RijndaelManaged Cryptography class in .NET " + Environment.NewLine +
-                                        "with a 256 block size, the current AES standard." + Environment.NewLine +
-                                        "Hashing uses the SHA256Managed class which creates a 32 byte fixed length hash"
-                                        , "How To Use This", MessageBoxButtons.OK);
-        }
+      
 
 
 
@@ -181,7 +166,7 @@ namespace EncryptAndHash
         {
             byte[] salt = new byte[] { 0x49, 0x54, 0x54, 0x56, 0x49, 0x51, 0x55, 0x49 }; // Must be at least eight bytes
             int iterations = 1052; // should be >= 1000.
-            string password = GetKey();
+            string password = tbFileKey.Text.Length > 0 ? tbFileKey.Text.Trim() : GetKey();
             string destinationFilename = "";
             string sourceFilename = tbFilePath.Text;
             string[] sourceFiles = sourceFilename.Split(Environment.NewLine.ToCharArray()); 
@@ -296,6 +281,42 @@ namespace EncryptAndHash
             {
                 tbFilePath.Text += file + Environment.NewLine;
             }
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("To Encrypt a File" + Environment.NewLine +
+                                       "You can drag the file or files into the text area or use the Browse button to " +
+                                       "select the file(s). Enter an Encryption key. There is a default key so this is optional. Click Encrypt." + Environment.NewLine +
+                                       "The encrypted file appears in the same directory as the original. It will have the extension \".dlr\" appended to it." + Environment.NewLine +
+                                       "You can optionally elect to delete the original file by checking that box." + Environment.NewLine + Environment.NewLine +
+                                       "To Decrypt" + Environment.NewLine +
+                                       "Drag or Browse the encrypted files to the text area." + Environment.NewLine +
+                                       "Enter the key, if there is one. If you don't know it try leaving this blank." + Environment.NewLine +
+                                       "Click the Decrypt button" + Environment.NewLine +
+                                       "The original file is restored to the same directory as the encrypted version and the encrypted version is deleted." + Environment.NewLine + Environment.NewLine +
+                                       "Encryption is done with the RijndaelManaged Cryptography class in .NET " + Environment.NewLine +
+                                       "with a 256 block size, the current AES standard." + Environment.NewLine +
+                                       "Hashing uses the SHA256Managed class which creates a 32 byte fixed length hash"
+                                       , "How To Use This", MessageBoxButtons.OK);
+
+        }
+
+        private void pictureBox3_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("To Encrypt or Hash" + Environment.NewLine +
+                                        "Enter the text that you want to Encrypt or Hash" + Environment.NewLine +
+                                        "Enter an Encryption/Hash key. There is a default key so this is optional" + Environment.NewLine +
+                                        "Click Encrypt or Hash. The result appears in the Encrypted Text box." + Environment.NewLine + Environment.NewLine +
+                                        "To Decrypt" + Environment.NewLine +
+                                        "Paste the encrypted text string into the Encrypted Text box" + Environment.NewLine +
+                                        "Enter the key, if there is one. If you don't know it try leaving this blank." + Environment.NewLine +
+                                        "Click the Decrypt button" + Environment.NewLine +
+                                        "The decrypted text appears in the Encrypt or Hash text box." + Environment.NewLine + Environment.NewLine +
+                                        "Encryption is done with the RijndaelManaged Cryptography class in .NET " + Environment.NewLine +
+                                        "with a 256 block size, the current AES standard." + Environment.NewLine +
+                                        "Hashing uses the SHA256Managed class which creates a 32 byte fixed length hash"
+                                        , "How To Use This", MessageBoxButtons.OK);
         }
     }
 }

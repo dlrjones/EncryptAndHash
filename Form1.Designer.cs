@@ -45,16 +45,20 @@
             this.btnDecrypt = new System.Windows.Forms.Button();
             this.btnEncrypt = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnBrowse = new System.Windows.Forms.Button();
-            this.tbFilePath = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
             this.cbDelete = new System.Windows.Forms.CheckBox();
             this.btnFileDecrypt = new System.Windows.Forms.Button();
             this.btnFileEncrypt = new System.Windows.Forms.Button();
+            this.btnBrowse = new System.Windows.Forms.Button();
+            this.tbFilePath = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.btnQuit = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.tbFileKey = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox4
@@ -190,7 +194,7 @@
             // 
             this.btnDecrypt.Location = new System.Drawing.Point(90, 211);
             this.btnDecrypt.Name = "btnDecrypt";
-            this.btnDecrypt.Size = new System.Drawing.Size(75, 28);
+            this.btnDecrypt.Size = new System.Drawing.Size(82, 28);
             this.btnDecrypt.TabIndex = 8;
             this.btnDecrypt.Text = "Decrypt";
             this.btnDecrypt.UseVisualStyleBackColor = true;
@@ -208,6 +212,9 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label7);
+            this.groupBox1.Controls.Add(this.tbFileKey);
+            this.groupBox1.Controls.Add(this.pictureBox1);
             this.groupBox1.Controls.Add(this.cbDelete);
             this.groupBox1.Controls.Add(this.btnFileDecrypt);
             this.groupBox1.Controls.Add(this.btnFileEncrypt);
@@ -215,17 +222,48 @@
             this.groupBox1.Controls.Add(this.tbFilePath);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(12, 316);
+            this.groupBox1.Location = new System.Drawing.Point(12, 306);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(529, 302);
+            this.groupBox1.Size = new System.Drawing.Size(529, 358);
             this.groupBox1.TabIndex = 12;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "File Encryption";
             // 
+            // cbDelete
+            // 
+            this.cbDelete.AutoSize = true;
+            this.cbDelete.Location = new System.Drawing.Point(9, 324);
+            this.cbDelete.Name = "cbDelete";
+            this.cbDelete.Size = new System.Drawing.Size(295, 24);
+            this.cbDelete.TabIndex = 63;
+            this.cbDelete.Text = "Delete Source File After Encryption";
+            this.cbDelete.UseVisualStyleBackColor = true;
+            this.cbDelete.CheckedChanged += new System.EventHandler(this.cbDelete_CheckedChanged);
+            // 
+            // btnFileDecrypt
+            // 
+            this.btnFileDecrypt.Location = new System.Drawing.Point(90, 278);
+            this.btnFileDecrypt.Name = "btnFileDecrypt";
+            this.btnFileDecrypt.Size = new System.Drawing.Size(82, 28);
+            this.btnFileDecrypt.TabIndex = 62;
+            this.btnFileDecrypt.Text = "Decrypt";
+            this.btnFileDecrypt.UseVisualStyleBackColor = true;
+            this.btnFileDecrypt.Click += new System.EventHandler(this.btnFileDecrypt_Click);
+            // 
+            // btnFileEncrypt
+            // 
+            this.btnFileEncrypt.Location = new System.Drawing.Point(9, 279);
+            this.btnFileEncrypt.Name = "btnFileEncrypt";
+            this.btnFileEncrypt.Size = new System.Drawing.Size(75, 28);
+            this.btnFileEncrypt.TabIndex = 61;
+            this.btnFileEncrypt.Text = "Encrypt";
+            this.btnFileEncrypt.UseVisualStyleBackColor = true;
+            this.btnFileEncrypt.Click += new System.EventHandler(this.btnFileEncrypt_Click);
+            // 
             // btnBrowse
             // 
             this.btnBrowse.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBrowse.Location = new System.Drawing.Point(435, 219);
+            this.btnBrowse.Location = new System.Drawing.Point(435, 280);
             this.btnBrowse.Name = "btnBrowse";
             this.btnBrowse.Size = new System.Drawing.Size(75, 31);
             this.btnBrowse.TabIndex = 60;
@@ -255,47 +293,43 @@
             this.label6.TabIndex = 59;
             this.label6.Text = "Drag and Drop files here";
             // 
-            // cbDelete
-            // 
-            this.cbDelete.AutoSize = true;
-            this.cbDelete.Location = new System.Drawing.Point(9, 263);
-            this.cbDelete.Name = "cbDelete";
-            this.cbDelete.Size = new System.Drawing.Size(295, 24);
-            this.cbDelete.TabIndex = 63;
-            this.cbDelete.Text = "Delete Source File After Encryption";
-            this.cbDelete.UseVisualStyleBackColor = true;
-            this.cbDelete.CheckedChanged += new System.EventHandler(this.cbDelete_CheckedChanged);
-            // 
-            // btnFileDecrypt
-            // 
-            this.btnFileDecrypt.Location = new System.Drawing.Point(90, 217);
-            this.btnFileDecrypt.Name = "btnFileDecrypt";
-            this.btnFileDecrypt.Size = new System.Drawing.Size(82, 28);
-            this.btnFileDecrypt.TabIndex = 62;
-            this.btnFileDecrypt.Text = "Decrypt";
-            this.btnFileDecrypt.UseVisualStyleBackColor = true;
-            this.btnFileDecrypt.Click += new System.EventHandler(this.btnFileDecrypt_Click);
-            // 
-            // btnFileEncrypt
-            // 
-            this.btnFileEncrypt.Location = new System.Drawing.Point(9, 218);
-            this.btnFileEncrypt.Name = "btnFileEncrypt";
-            this.btnFileEncrypt.Size = new System.Drawing.Size(75, 28);
-            this.btnFileEncrypt.TabIndex = 61;
-            this.btnFileEncrypt.Text = "Encrypt";
-            this.btnFileEncrypt.UseVisualStyleBackColor = true;
-            this.btnFileEncrypt.Click += new System.EventHandler(this.btnFileEncrypt_Click);
-            // 
             // btnQuit
             // 
             this.btnQuit.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnQuit.Location = new System.Drawing.Point(447, 646);
+            this.btnQuit.Location = new System.Drawing.Point(447, 670);
             this.btnQuit.Name = "btnQuit";
             this.btnQuit.Size = new System.Drawing.Size(75, 28);
             this.btnQuit.TabIndex = 21;
             this.btnQuit.Text = "Quit";
             this.btnQuit.UseVisualStyleBackColor = true;
             this.btnQuit.Click += new System.EventHandler(this.btnQuit_Click);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(183, 278);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(26, 27);
+            this.pictureBox1.TabIndex = 55;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            // 
+            // tbFileKey
+            // 
+            this.tbFileKey.Location = new System.Drawing.Point(12, 239);
+            this.tbFileKey.Name = "tbFileKey";
+            this.tbFileKey.Size = new System.Drawing.Size(488, 27);
+            this.tbFileKey.TabIndex = 64;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(9, 216);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(112, 20);
+            this.label7.TabIndex = 65;
+            this.label7.Text = "Key (optional)";
             // 
             // Form1
             // 
@@ -318,6 +352,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -347,6 +382,9 @@
         private System.Windows.Forms.TextBox tbFilePath;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btnQuit;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.TextBox tbFileKey;
+        private System.Windows.Forms.Label label7;
     }
 }
 
