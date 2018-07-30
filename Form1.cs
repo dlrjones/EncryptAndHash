@@ -157,6 +157,7 @@ namespace EncryptAndHash
 
         private string GetKey()
         {
+            //returns the default encryption key which is itself encrypted and stored in the text file "setup.dll"
             string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
             string[] key = File.ReadAllLines(appDirectory + "setup.dll");
             return StringCipher.Decrypt(key[0]);
@@ -212,7 +213,7 @@ namespace EncryptAndHash
         {
             byte[] salt = new byte[] { 0x49, 0x54, 0x54, 0x56, 0x49, 0x51, 0x55, 0x49 }; // Must be at least eight bytes
             int iterations = 1052; // >= 1000.
-            string password = GetKey();     //"ThisIsATest";  xxgWvLe0kJRU
+            string password = tbFileKey.Text.Length > 0 ? tbFileKey.Text.Trim() : GetKey();    
             string destinationFilename = "";
             string sourceFilename = tbFilePath.Text;
             string[] sourceFiles = sourceFilename.Split(Environment.NewLine.ToCharArray());
@@ -287,7 +288,8 @@ namespace EncryptAndHash
         {
             MessageBox.Show("To Encrypt a File" + Environment.NewLine +
                                        "You can drag the file or files into the text area or use the Browse button to " +
-                                       "select the file(s). Enter an Encryption key. There is a default key so this is optional. Click Encrypt." + Environment.NewLine +
+                                       "select the file(s). Enter an Encryption key. There is a default key so this is optional. When you supply a key " +
+                                       "it is on you to keep track of it, it's not saved. Click Encrypt." + Environment.NewLine +
                                        "The encrypted file appears in the same directory as the original. It will have the extension \".dlr\" appended to it." + Environment.NewLine +
                                        "You can optionally elect to delete the original file by checking that box." + Environment.NewLine + Environment.NewLine +
                                        "To Decrypt" + Environment.NewLine +
