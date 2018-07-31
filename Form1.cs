@@ -167,7 +167,7 @@ namespace EncryptAndHash
         {
             byte[] salt = new byte[] { 0x49, 0x54, 0x54, 0x56, 0x49, 0x51, 0x55, 0x49 }; // Must be at least eight bytes
             int iterations = 1052; // should be >= 1000.
-            string password = tbFileKey.Text.Length > 0 ? tbFileKey.Text.Trim() : GetKey();
+            string password = tbFileKey.Text.Length > 0 ? tbFileKey.Text.Trim() : "";     // GetKey();
             string destinationFilename = "";
             string sourceFilename = tbFilePath.Text;
             string[] sourceFiles = sourceFilename.Split(Environment.NewLine.ToCharArray()); 
@@ -178,42 +178,20 @@ namespace EncryptAndHash
                     if (File.Exists(destinationFilename))
                         File.Delete(destinationFilename);
 
-                    EncryptFile(source, destinationFilename, password, salt, iterations);
+                    StringCipher.EncryptFile(source, destinationFilename, password, salt, iterations);
                     if (deleteSource)
                         File.Delete(source);
                 }                
             }
             tbFilePath.Text = "";
+            cbDelete.Checked = false;
         }       
-
-        private void EncryptFile(string sourceFilename, string destinationFilename, string password, byte[] salt, int iterations)
-        {
-            AesManaged aes = new AesManaged();
-            aes.BlockSize = aes.LegalBlockSizes[0].MaxSize;
-            aes.KeySize = aes.LegalKeySizes[0].MaxSize;
-            Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(password, salt, iterations);
-            aes.Key = key.GetBytes(aes.KeySize / 8);
-            aes.IV = key.GetBytes(aes.BlockSize / 8);
-            aes.Mode = CipherMode.CBC;
-            ICryptoTransform transform = aes.CreateEncryptor(aes.Key, aes.IV);
-
-            using (FileStream destination = new FileStream(destinationFilename, FileMode.CreateNew, FileAccess.Write, FileShare.None))
-            {
-                using (CryptoStream cryptoStream = new CryptoStream(destination, transform, CryptoStreamMode.Write))
-                {
-                    using (FileStream source = new FileStream(sourceFilename, FileMode.Open, FileAccess.Read, FileShare.Read))
-                    {
-                        source.CopyTo(cryptoStream);
-                    }
-                }
-            }
-        }
-
+     
         private void btnFileDecrypt_Click(object sender, EventArgs e)
         {
             byte[] salt = new byte[] { 0x49, 0x54, 0x54, 0x56, 0x49, 0x51, 0x55, 0x49 }; // Must be at least eight bytes
             int iterations = 1052; // >= 1000.
-            string password = tbFileKey.Text.Length > 0 ? tbFileKey.Text.Trim() : GetKey();    
+            string password = tbFileKey.Text.Length > 0 ? tbFileKey.Text.Trim() : "";  // GetKey();    
             string destinationFilename = "";
             string sourceFilename = tbFilePath.Text;
             string[] sourceFiles = sourceFilename.Split(Environment.NewLine.ToCharArray());
@@ -225,46 +203,13 @@ namespace EncryptAndHash
                     destinationFilename = source.Substring(0, source.Length - 4);
                     if (File.Exists(destinationFilename))
                         File.Delete(destinationFilename);
-                    DecryptFile(source, destinationFilename, password, salt, iterations);
+                    StringCipher.DecryptFile(source, destinationFilename, password, salt, iterations);
                     File.Delete(source);
                  }
             }
             tbFilePath.Text = "";
         }
-
-        private void DecryptFile(string sourceFilename, string destinationFilename, string password, byte[] salt, int iterations)
-        {           
-            AesManaged aes = new AesManaged();
-            aes.BlockSize = aes.LegalBlockSizes[0].MaxSize;
-            aes.KeySize = aes.LegalKeySizes[0].MaxSize;
-            Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(password, salt, iterations);
-            aes.Key = key.GetBytes(aes.KeySize / 8);
-            aes.IV = key.GetBytes(aes.BlockSize / 8);
-            aes.Mode = CipherMode.CBC;
-            ICryptoTransform transform = aes.CreateDecryptor(aes.Key, aes.IV);
-
-            using (FileStream destination = new FileStream(destinationFilename, FileMode.CreateNew, FileAccess.Write, FileShare.None))
-            {
-                using (CryptoStream cryptoStream = new CryptoStream(destination, transform, CryptoStreamMode.Write))
-                {
-                    try
-                    {
-                        using (FileStream source = new FileStream(sourceFilename, FileMode.Open, FileAccess.Read, FileShare.Read))
-                        {
-                            source.CopyTo(cryptoStream);
-                        }
-                    }
-                    catch (CryptographicException exception)
-                    {
-                        if (exception.Message == "Padding is invalid and cannot be removed.")
-                            throw new ApplicationException("Universal Microsoft Cryptographic Exception (Not to be believed!)", exception);
-                        else
-                            throw;
-                    }
-                }
-            }
-        }
-
+       
         private void cbDelete_CheckedChanged(object sender, EventArgs e)
         {
             deleteSource = !deleteSource;
