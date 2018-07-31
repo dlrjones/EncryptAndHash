@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using KeyMaster;
+using LogDefault;
 
 namespace EncryptAndHash
 {
@@ -13,11 +14,15 @@ namespace EncryptAndHash
     {
         private static NameValueCollection ConfigData = null;
         private bool deleteSource = false;
+        private LogManager lm = LogManager.GetInstance();
+
         public Form1()
         {
-            InitializeComponent();
+            InitializeComponent();            
             AllowDrop = true;
             ConfigData = (NameValueCollection)ConfigurationSettings.GetConfig("appSettings");
+            lm.LogFilePath = ConfigData.Get("logFilePath");
+            lm.LogFile = ConfigData.Get("logFile");
             tbString.Select();
         }
 
@@ -155,13 +160,13 @@ namespace EncryptAndHash
             }
         }
 
-        private string GetKey()
-        {
-            //returns the default encryption key which is itself encrypted and stored in the text file "setup.dll"
-            string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string[] key = File.ReadAllLines(appDirectory + "setup.dll");
-            return StringCipher.Decrypt(key[0]);
-        }
+        //private string GetKey()
+        //{
+        //    //returns the default encryption key which is itself encrypted and stored in the text file "setup.dll"
+        //    string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        //    string[] key = File.ReadAllLines(appDirectory + "setup.dll");
+        //    return StringCipher.Decrypt(key[0]);
+        //}
 
         private void btnFileEncrypt_Click(object sender, EventArgs e)
         {
@@ -170,21 +175,29 @@ namespace EncryptAndHash
             string password = tbFileKey.Text.Length > 0 ? tbFileKey.Text.Trim() : "";     // GetKey();
             string destinationFilename = "";
             string sourceFilename = tbFilePath.Text;
-            string[] sourceFiles = sourceFilename.Split(Environment.NewLine.ToCharArray()); 
-            foreach (string source in sourceFiles)
+            string[] sourceFiles = sourceFilename.Split(Environment.NewLine.ToCharArray());
+            try
             {
-                if(source.Length > 0){
-                    destinationFilename = source + ".dlr";
-                    if (File.Exists(destinationFilename))
-                        File.Delete(destinationFilename);
+                foreach (string source in sourceFiles)
+                {
+                    if (source.Length > 0)
+                    {
+                        destinationFilename = source + ".dlr";
+                        if (File.Exists(destinationFilename))
+                            File.Delete(destinationFilename);
 
-                    StringCipher.EncryptFile(source, destinationFilename, password, salt, iterations);
-                    if (deleteSource)
-                        File.Delete(source);
-                }                
+                        StringCipher.EncryptFile(source, destinationFilename, password, salt, iterations);
+                        if (deleteSource)
+                            File.Delete(source);
+                    }
+                }
+                tbFilePath.Text = "";
+                cbDelete.Checked = false;
+            }catch(Exception ex)
+            {
+                MessageBox.Show("Something went wrong." + Environment.NewLine + "Check the log for the error message");
+                lm.Write(ex.Message);
             }
-            tbFilePath.Text = "";
-            cbDelete.Checked = false;
         }       
      
         private void btnFileDecrypt_Click(object sender, EventArgs e)
@@ -195,19 +208,25 @@ namespace EncryptAndHash
             string destinationFilename = "";
             string sourceFilename = tbFilePath.Text;
             string[] sourceFiles = sourceFilename.Split(Environment.NewLine.ToCharArray());
-
-            foreach (string source in sourceFiles)
+            try
             {
-                if (source.Length > 0)
+                foreach (string source in sourceFiles)
                 {
-                    destinationFilename = source.Substring(0, source.Length - 4);
-                    if (File.Exists(destinationFilename))
-                        File.Delete(destinationFilename);
-                    StringCipher.DecryptFile(source, destinationFilename, password, salt, iterations);
-                    File.Delete(source);
-                 }
+                    if (source.Length > 0)
+                    {
+                        destinationFilename = source.Substring(0, source.Length - 4);
+                        if (File.Exists(destinationFilename)) //if the original unencrypted file is present, delete it.
+                            File.Delete(destinationFilename);
+                        StringCipher.DecryptFile(source, destinationFilename, password, salt, iterations);
+                        File.Delete(source);
+                    }
+                }
+                tbFilePath.Text = "";
+            }catch(Exception ex)
+            {
+                MessageBox.Show("Did you mean to click \"Encrypt\"?" + Environment.NewLine + "if not then check the log for the error message.");
+                lm.Write(ex.Message);
             }
-            tbFilePath.Text = "";
         }
        
         private void cbDelete_CheckedChanged(object sender, EventArgs e)
@@ -241,7 +260,7 @@ namespace EncryptAndHash
                                        "Drag or Browse the encrypted files to the text area." + Environment.NewLine +
                                        "Enter the key, if there is one. If you don't know it try leaving this blank." + Environment.NewLine +
                                        "Click the Decrypt button" + Environment.NewLine +
-                                       "The original file is restored to the same directory as the encrypted version and the encrypted version is deleted." + Environment.NewLine + Environment.NewLine +
+                                       "The original file is restored to the same directory as the encrypted version and the encrypted version is deleted. If the original file is present it will be replaced." + Environment.NewLine + Environment.NewLine +
                                        "Encryption is done with the RijndaelManaged Cryptography class in .NET " + Environment.NewLine +
                                        "with a 256 block size, the current AES standard." + Environment.NewLine +
                                        "Hashing uses the SHA256Managed class which creates a 32 byte fixed length hash"
