@@ -45,6 +45,9 @@
             this.btnDecrypt = new System.Windows.Forms.Button();
             this.btnEncrypt = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.tbFileKey = new System.Windows.Forms.TextBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.cbDelete = new System.Windows.Forms.CheckBox();
             this.btnFileDecrypt = new System.Windows.Forms.Button();
             this.btnFileEncrypt = new System.Windows.Forms.Button();
@@ -52,9 +55,7 @@
             this.tbFilePath = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.btnQuit = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.tbFileKey = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
+            this.linkToLog = new System.Windows.Forms.LinkLabel();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -229,6 +230,33 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "File Encryption";
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(9, 216);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(112, 20);
+            this.label7.TabIndex = 65;
+            this.label7.Text = "Key (optional)";
+            // 
+            // tbFileKey
+            // 
+            this.tbFileKey.Location = new System.Drawing.Point(12, 239);
+            this.tbFileKey.Name = "tbFileKey";
+            this.tbFileKey.Size = new System.Drawing.Size(488, 27);
+            this.tbFileKey.TabIndex = 64;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(183, 278);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(26, 27);
+            this.pictureBox1.TabIndex = 55;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            // 
             // cbDelete
             // 
             this.cbDelete.AutoSize = true;
@@ -304,32 +332,16 @@
             this.btnQuit.UseVisualStyleBackColor = true;
             this.btnQuit.Click += new System.EventHandler(this.btnQuit_Click);
             // 
-            // pictureBox1
+            // linkToLog
             // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(183, 278);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(26, 27);
-            this.pictureBox1.TabIndex = 55;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
-            // 
-            // tbFileKey
-            // 
-            this.tbFileKey.Location = new System.Drawing.Point(12, 239);
-            this.tbFileKey.Name = "tbFileKey";
-            this.tbFileKey.Size = new System.Drawing.Size(488, 27);
-            this.tbFileKey.TabIndex = 64;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(9, 216);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(112, 20);
-            this.label7.TabIndex = 65;
-            this.label7.Text = "Key (optional)";
+            this.linkToLog.AutoSize = true;
+            this.linkToLog.Location = new System.Drawing.Point(444, 293);
+            this.linkToLog.Name = "linkToLog";
+            this.linkToLog.Size = new System.Drawing.Size(97, 17);
+            this.linkToLog.TabIndex = 22;
+            this.linkToLog.TabStop = true;
+            this.linkToLog.Text = "Open Log File";
+            this.linkToLog.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkToLog_LinkClicked);
             // 
             // Form1
             // 
@@ -337,6 +349,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(556, 703);
+            this.Controls.Add(this.linkToLog);
             this.Controls.Add(this.btnQuit);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox1);
@@ -354,6 +367,7 @@
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -385,6 +399,7 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TextBox tbFileKey;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.LinkLabel linkToLog;
     }
 }
 

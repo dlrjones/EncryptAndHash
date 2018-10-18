@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Configuration;
 using System.Security.Cryptography;
 using System.Text;
+using System.Diagnostics;
 using System.Windows.Forms;
 using System.IO;
 using KeyMaster;
@@ -285,6 +286,13 @@ namespace EncryptAndHash
                                         "with a 256 block size, the current AES standard." + Environment.NewLine +
                                         "Hashing uses the SHA256Managed class which creates a 32 byte fixed length hash"
                                         , "How To Use This", MessageBoxButtons.OK);
+        }
+
+        private void linkToLog_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process process = new Process();
+            process.StartInfo.FileName = lm.LogFilePath + lm.LogFile;
+            process.Start();
         }
     }
 }
