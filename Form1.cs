@@ -21,7 +21,7 @@ namespace EncryptAndHash
         {
             InitializeComponent();            
             AllowDrop = true;
-            ConfigData = (NameValueCollection)ConfigurationSettings.GetConfig("appSettings");
+            ConfigData = (NameValueCollection)ConfigurationManager.GetSection("appSettings");
             lm.LogFilePath = ConfigData.Get("logFilePath");
             lm.LogFile = ConfigData.Get("logFile");
             tbString.Select();
